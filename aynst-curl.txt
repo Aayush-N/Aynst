@@ -1,0 +1,3 @@
+curl -v -H 'Host: aynst.in' 139.59.31.71:35537
+nano /Users/aayush/.ssh/known_hosts
+ssh-keygen -R "139.59.31.71"

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+{% extends "layouts.html" %}
+{% block content %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <div class=" home top-section">
+        <h2><font face="Cherry Cream Soda" color="#01579B">Find Anything, Everything</font></h2>
+        <script>
+        window.onload = function() {
+            localStorage.clear();
+            $(window).resize(function() {
+                var alerted = localStorage.getItem('alerted') || '';
+                if ($(window).width() < 1000) {
+                    if(alerted != 'yes'){
+                    swal({
+                        title: "You're on a Mobile, isn't it??",
+                        text: "Please switch over to a Laptop/Desktop for a better experience.",
+                        imageUrl: "/static/images/mobile.png"
+                    });
+                    localStorage.setItem('alerted', 'yes');
+                    }
+                }
+            });
+        }
+        </script>
+        <br>
+        <br>
+        <br>
+        <form class="form" method="post" action="/place" >
+            <div id="mainselection" class="mdl-js-button mdl-button--raised mdl-button--accent">
+                <select name="menu"  tabindex="1" id="placeselection">
+                        <option value="1" disabled selected>What are you looking for?</option>
+        				<option id="default" value="restaurant">Restaurants</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="movie_theater">Movie Theatres</option>
+                        <option value="atm">ATM</option>
+                        <option value="bank">Banks</option>
+                        <option value="pharmacy">Pharmacy</option>
+                        <option value="dentist">Dentists</option>
+                        <option value="hospital">Hospitals</option>
+                        <option value="shopping_mall">Shopping Centres</option>
+        		</select>
+            </div>
+            <br>
+            <br>
+            <input class="form2" id ="geocomplete" value="{{city}}" type="text" placeholder="Where at?  eg: Yelahanka, Bengaluru" name="place" >
+            <!--TODO put in 12/4 wrapper-->
+                <div class="submit-btn">
+                    <input type="submit" style="margin-top: 5%;" value="Search" class="mdl-button md-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="submit">
+                </div>
+        </form>
+        <script type="text/javascript">
+            document.getElementById('submit').addEventListener('click', function() {
+              var geocoder = new google.maps.Geocoder;
+                geocodeLatLng(geocoder);
+              });
+            function geocodeLatLng(geocoder) {
+              var input = document.getElementById('gps').value;
+              var latlngStr = input.split(',', 2);
+              var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+              geocoder.geocode({'location': latlng}, function(results, status) {
+                if (status === 'OK') {
+                  if (results[1]) {
+                  //window.alert(results[1].formatted_address);
+                  document.getElementById("map").innerHTML = results[1].formatted_address;
+                  }
+                  else {
+                    window.alert('No results found');
+                  }
+                }
+                else {
+                  window.alert('Geocoder failed due to: ' + status);
+                }
+              });
+            }
+        </script>
+        <br>
+        {% if city %}
+        <div class = "new">
+            <!--<p>You are at {{ x }}</p>-->
+            <h2 style="text-decoration: underline; font-family:'Open Sans';color:#3e2a53;">Current Weather</h2>
+            <br>
+            <br>
+            <p style="font-size:28px;">{{curr}}</p>
+            <div class=" new1 col-md-6">
+
+                <br>
+                <p><img src="static/images/{{ iconLink }}" alt={{curr}} class="iconLink"></p>
+            </div>
+            <div class="col-md-6 showTemp">
+                <p class="temp">{{tempNow}} &#8451;</p>
+                <p class="underTemp1">Wind Speed: {{windSpeed}} Kmph</p>
+                <p class="underTemp2">Humidity: {{humidity}} % </p>
+                <p class="underTemp3">Low: {{temp_min}}</p>
+                <p class="underTemp4">High: {{temp_max}}</p>
+                <i data-toggle="tooltip" title="Go Back" class="material-icons minusIcon">info</i>
+                <i data-toggle="tooltip" title="Know More" class="material-icons plusIcon">info_outline</i>
+                <br>
+                <a class="attributionWeather" alt="OpenWeatherMap" href="http://www.openweathermap.org" target="_blank">Weather Courtsey:  Open Weather Map</a>
+            </div>
+        </div>
+            <!--<tr><td></td><td><b><a href="/city/1277333">{{city}},{{country}} </a></b><img src="http://openweathermap.org/images/flags/in.png"><b><i>  {{curr}} </i> </b><p>  <span class="badge badge-info"> </span>  Wind Speed: {{windSpeed}}</p></td></tr>-->
+        </div>
+        <br>
+        <br>
+        <div>
+            <br>
+        </div>
+        <div class="locate container-fluid">
+            <br>
+            <br>
+            <h2 style="color:#3e2a53;">Showing {{typeof}}s near {{city}}</h2>
+            <br>
+            <br>
+            {% for i,j,k,l in tempList %}
+            <div class="wrapper-places well" id="showPlace">
+            <div class="cont">
+                    <img id="photo" width="100" height="100" src={{k}}>
+                    <h3 class="placeName">{{i}}</h3>
+                    <span class="rating">{{j}}</span>
+            </div>
+            <hr>
+             <p align="left" class="address"><strong>ADDRESS : </strong>{{l}}</p>
+             <p>Other details coming soon!</p>
+            <a type="button" href="http://www.maps.google.com/?q={{l}}" target='_blank' class="btn btn-default btn-block map" ><font face="Baloo Paaji"> View On Map</font></a>
+        </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    <script>
+$(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+    <script type="text/javascript">
+        function DropDown(el) {
+            this.dd = el;
+            this.initEvents();
+        }
+        DropDown.prototype = {
+            initEvents : function() {
+                var obj = this;
+                obj.dd.on('click', function(event){
+                    $(this).toggleClass('active');
+                    event.stopPropagation();
+                });
+            }
+        }
+        $(function() {
+            var dd = new DropDown( $('#dd') );
+            $(document).click(function() {
+                // all dropdowns
+                $('.wrapper-dropdown-2').removeClass('active');
+            });
+        });
+        </script>
+        <script src="jquery.geocomplete.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyCRSYGXPX_7C-JXzUcQQNvi36CZe99FsD8"></script>
+<script>
+var pac_input = document.getElementById('geocomplete');
+
+(function pacSelectFirst(input){
+    var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+
+    function addEventListenerWrapper(type, listener) {
+    if (type == "keydown") {
+      var orig_listener = listener;
+      listener = function (event) {
+        var suggestion_selected = $(".pac-item-selected").length > 0;
+        if (event.which == 13 && !suggestion_selected) {
+          var simulated_downarrow = $.Event("keydown", {keyCode:40, which:40})
+          orig_listener.apply(input, [simulated_downarrow]);
+        }
+
+        orig_listener.apply(input, [event]);
+      };
+    }
+
+    // add the modified listener
+    _addEventListener.apply(input, [type, listener]);
+  }
+
+  if (input.addEventListener)
+    input.addEventListener = addEventListenerWrapper;
+  else if (input.attachEvent)
+    input.attachEvent = addEventListenerWrapper;
+
+})(pac_input);
+
+
+$(function(){
+  var autocomplete = new google.maps.places.Autocomplete(pac_input);
+});
+</script>
+<script>
+$(function() {
+    $('.temp,.plusIcon').on('mouseenter', function() {
+        $('.temp').animate({
+            opacity: '0.5'
+        },'fast');
+    });
+    $('.temp,.plusIcon').on('mouseleave', function() {
+        $('.temp').animate({
+            opacity: '1.0'
+        },'fast');
+    });
+    $('.temp,.plusIcon').on('click', function() {
+        $('.temp,.plusIcon').hide();
+        $('.underTemp1,.underTemp2,.underTemp3,.underTemp4,.minusIcon').fadeIn();
+    });
+     $('.underTemp1,.underTemp2,.underTemp3,.underTemp4,.minusIcon').on('mouseenter', function() {
+        $('.underTemp1,.underTemp2,.underTemp3,.underTemp4').animate({
+            opacity: '0.5'
+        },'fast');
+    });
+    $('.underTemp1,.underTemp2,.underTemp3,.underTemp4,.minusIcon').on('mouseleave', function() {
+        $('.underTemp1,.underTemp2,.underTemp3,.underTemp4').animate({
+            opacity: '1.0'
+        },'fast');
+    });
+    $('.underTemp1,.underTemp2,.underTemp3,.underTemp4,.minusIcon').on('click', function() {
+        $('.underTemp1,.underTemp2,.underTemp3,.underTemp4,.minusIcon').hide();
+        $('.temp,.plusIcon').fadeIn();
+    });
+});
+</script>
+<script>
+
+    document.getElementById("submit").addEventListener('click', function() {
+    if(document.getElementById("placeselection").value == "1")
+        {
+            document.getElementById("default").selected = "true";
+        }
+    });
+</script>
+{% endblock %}

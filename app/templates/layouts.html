@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="google-site-verification" content="_mO3y3HyT9hRQxikAjbtPOd2lOrax1Ib7Y7woFLe0n4" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/stylesheet.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Baloo+Paaji">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Cherry+Cream+Soda">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-red.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="http://fonts.googleapis.com/icon?family=Open+Sans:300,400,600" rel="stylesheet" type="text/css">
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://use.fontawesome.com/ccab5fc7b2.js"></script>
+        <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+        <script src="dist/sweetalert.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsVCgEcz8wGfRwpXkTTyzMLgTnZ8rmZok&libraries=places"></script>
+        <title>Aynst | Find things Anywhere, Everywhere</title>
+        <script src="{{ url_for('static', filename = 'js/sweetalert.min.js')}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/sweetalert.css') }}">
+    </head>
+    <body>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-83661363-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <div class="container-fluid body-full col-md-12 col-sm-12">
+            <div class="main-logo font-lo">
+                <font>Aynst</font>
+            </div>
+        {% block content %}
+
+        {% endblock %}
+        </div>
+        </div>
+        <div data-position="fixed" data-fullscreen="true" class="mdl-mini-footer " id="footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">
+                    <a href="{{ url_for('about') }}">Aynst</a>
+                <ul class="mdl-mini-footer__link-list">
+                <li><a href="/about">About</a></li>
+                <li><a href="/conditions">Terms & Conditions</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact us</a></li>
+                </ul>
+                </div>
+            </div>
+            <div class="mdl-mini-footer__right-section">
+                <img src="static/images/powered2.png" alt="powered by google">
+            </div>
+        </div>
+    </body>
+</html>
